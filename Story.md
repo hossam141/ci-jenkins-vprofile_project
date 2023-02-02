@@ -1,5 +1,7 @@
 Continous Integration [CI] Flow:
 --------------------------------
+ ==> Diagram of the CI: https://github.com/hossam141/ci-jenkins-vprofile_project/blob/main/Diagram.PNG
+
 1- Developer write the code, make the changes to the code and tested locally.
 
 2- Developer will be integrated with VCS like GitHub.
@@ -33,3 +35,5 @@ Continous Integration [CI] Flow:
 
 12- Code post Notification:
 	- Integrate Jenkins with Slack and notify member with the status of the pipeline.
+
+ 
