@@ -17,7 +17,7 @@ Continous Integration [CI] Flow:
 	- Generte some reports in XML Format.
 
 8- Conduct another type of test called Code Analysis using SonarQube and CheckStyle.
-	- To checj if the code has any vulnarbilties.
+	- To check if the code has any vulnarbilties.
 	- Check any bugs ?
 	- Following the best practices ?
 	- And many other parameters to analyse your code.
