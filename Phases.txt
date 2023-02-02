@@ -1,0 +1,78 @@
+Phases of the project:
+---------------------
+Phase_1: Installing Jenkins Server
+1- Manually:
+	- Provision an ubuntu20.04 LTS instance on AWS account.
+	- Create a Key-pair for SSH connection for the instance.
+	- Configure Security Group that allow traffic:
+			22 ==> For SSH
+			8080 ==> For Web-Browsing
+			80 ==> Integrate jenkins with SonarQube for Quality Gate check.	
+	- Insert the jenkins-setup script at [setup] folder in User data of the instance.
+
+2- SSH to Jenkins Server:
+	- To fech the User data Script use : #curl http://169.254.169.254/latest/user-data	
+	- Check Jenkins Service: #systemctl status jenkins
+	- Home directory of jenkins: /var/lib/jenkins/.
+	- Unlock Jenkins Server using initial Admin password.
+
+3- Go to Jenkins web bage and start it by installing the Plugins you want.
+
+4- Set Username and password [Admin User].
+
+
+Phase_2: Installing certain plugins on Jenkins
+	- Nexus Artifact Uploader
+	- SonarQube Scanner
+	- Build Timestamp
+	- Pipeline Maven Integration 
+	- Pipeline Utility Steps
+	- Git plugin
+	-Slack Notification
+
+
+Phase_3: Preparing Jenkins Server 
+1- Our project depend on jdk-8 and Maven3 [OeacleJDK-8 and MAVEN3]
+   @ Mange Jenkins ==> Global Configuration Tools
+	- SSH to Jenkins Server and install it and expose its home directory.
+	- Install it by mapping the home directory of JDK-8 to the tool of java you installed.
+	- Install Maven directly by choosing the version you want.
+	- Install automatically SonarQube Scanner and give a name to it.
+	- Integrate SonarQubbe with Jenkins. [This done after installing SonarQube Server]
+		- Go to Mange Jenkins ==> Configure System.
+		- After installing SonarQube plugin you will find SonarQube servers portion and start to integrate it with a genertaed token on SonarQube server.
+	- Integrate Jenkins with Nexus Server by connfiguring credentials of Nexus Server at Jenkins [Username and Password].
+		@Mange Jenkins ==> Manage Credentials ==> Add your Credentials.
+	- Integrate Slack with Jenkins
+		- Go to Mange Jenkins ==> Configure System.
+		- Add the workspace of the projectand channel name.
+		- Add credentilas [Secret text].
+
+
+Phase_4: Installing Nexus Server 
+1- Usiing CentOS7 OS for the provisioned instance.
+2- Same as Jenkins but use the script [nexus-setup.sh] into the user data for the provisioned instance.
+		- Configure Security Group that allow traffic:
+			22 ==> For SSH.
+			8081 ==> For Web-Browsing, also for Jenkins will integrate.
+		-  Unlock Nexus Server using initial Admin password.
+
+Phase_5: Installing SonarQube Server 
+1- Usiing Ubuntu18.04 LTS OS for the provisioned instance.
+2- Same as Jenkins but use the script [sonar-setup.sh] into the user data for the provisioned instance.
+ 		- Configure Security Group that allow traffic:	
+			22 ==> For SSH.
+			80 ==> For Web-Browsing as Nginx is listen on this porrt and forward traffic to 9000 which SonarQube runs on.
+			9000 ==> SonarQube listen.
+		- Login using username: admin & password: admin
+
+Phase_6: Prepare a Workspace in Slack account with the name of the project.
+		- Create a Channel with the name "jenkinscicd" [Channel == Group].
+		- Add Apps to your Slack [Jenkins-CI] and choose the Channel and take the genertaed token.
+ 		-  
+
+Phase_7: Start to implement your PAAC script by write your Jenkinsfile.
+	- Within Pipeline:
+		- Set a customized Quality Gate with certain conditions after SonarQube do its code analysis and fetch all the required reports.
+		- SonarQube will send the information of passing the Quality Gate to Jenkins by using Webhooks, so integrate an webhook between SonarQube server and 
+		  Jenkins Server.
